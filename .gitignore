@@ -3,3 +3,13 @@
 *.pdf
 *.csv
 .venv/
+*/*/__pycache__
+*/.ipynb_checkpoints/
+*/.vscode/
+*/.idea/
+*/.pytest_cache/
+*/.mypy_cache/
+*/.mypy_cache/
+*/.coverage
+*/.coverage.*
+*/.DS_Store
