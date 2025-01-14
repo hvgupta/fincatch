@@ -20,13 +20,13 @@ def __getText(page: BeautifulSoup) -> str:
 def __getSummary(page: BeautifulSoup) -> str:
     content = __getContent(page)
     if content == None:
-        return ""
+        return "this wikipedia page does not exist"
     summary_soup = content.find_all('p')
     summary = summary_soup[1].get_text() if len(summary_soup)>1 else ''
     
     return summary
 
-async def getTextandSummary(url: str) -> tuple[str, str]:
+async def getPageContent(url: str) -> tuple[str, str]:
     reponse = await fetch(url)
     page = __getSoupObject(reponse)
     text = __getText(page)

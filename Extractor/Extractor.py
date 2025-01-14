@@ -1,12 +1,12 @@
 import pandas as pd
 import asyncio
-import aiohttp
 from dataclasses import dataclass
 import adapters.investopedia_adapter as investopedia
 import adapters.wikipedia_adapter as enWiki
+from utility import writeToFile_GatheredContent
 
 
-@dataclass(frozen=True)
+@dataclass
 class Info:
     url: str
     text: str
@@ -19,9 +19,9 @@ async def fetch(url) -> dict[str,Info]:
     summary = ""
     
     if 'wikipedia' in url:
-        text, summary = await enWiki.getTextandSummary(url)
+        text, summary = await enWiki.getPageContent(url)
     elif 'investopedia' in url:
-        text, summary = await investopedia.getTextandSummary(url)
+        text, summary = await investopedia.getPageContent(url)
 
     store[url] = Info(url, text, summary)
     
@@ -36,14 +36,7 @@ async def outerFunc():
             
 async def main():
     await outerFunc()
-    with open('output.txt', 'w') as f:
-        for key in store:
-            f.write(f"URL: {key}\n")
-            f.write("--------- Summary ---------\n")
-            f.write(store[key].summary + "\n")
-            f.write("--------- Text ---------\n")
-            f.write(store[key].text + "\n")
-            f.write('============================================\n')
+    writeToFile_GatheredContent(store, 'output.txt')
 
 if __name__ == "__main__":
     asyncio.run(main())

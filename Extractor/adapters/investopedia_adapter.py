@@ -16,7 +16,7 @@ def __getSummary(page:BeautifulSoup) -> str:
     return summary
 
 
-async def getTextandSummary(url:str) -> tuple[str, str]:
+async def getPageContent(url:str) -> tuple[str, str]:
     reponse = await fetch(url)
     page = __getSoupObject(reponse)
     text = __getText(page)

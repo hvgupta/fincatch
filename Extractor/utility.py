@@ -12,3 +12,14 @@ async def fetch(url) -> str:
                 totalResponse += chunk.decode('utf-8', errors='ignore')
     
     return totalResponse
+
+
+def writeToFile_GatheredContent(store, filename):
+    with open(filename, 'w') as f:
+        for key in store:
+            f.write(f"URL: {key}\n")
+            f.write("--------- Summary ---------\n")
+            f.write(store[key].summary + "\n")
+            f.write("--------- Text ---------\n")
+            f.write(store[key].text + "\n")
+            f.write('============================================\n')
