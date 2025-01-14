@@ -1,20 +1,14 @@
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 import pandas as pd
 import asyncio
-from dataclasses import dataclass
 import adapters.investopedia_adapter as investopedia
 import adapters.wikipedia_adapter as enWiki
-from utility import writeToFile_GatheredContent
 
-
-@dataclass
-class Info:
-    url: str
-    text: str
-    summary: str 
-
-store = {}
-
-async def fetch(url) -> dict[str,Info]:
+async def __fetch(url) -> list:
     text = ""
     summary = ""
     
@@ -23,20 +17,24 @@ async def fetch(url) -> dict[str,Info]:
     elif 'investopedia' in url:
         text, summary = await investopedia.getPageContent(url)
 
-    store[url] = Info(url, text, summary)
+    return [url, text, summary]
     
-async def outerFunc():
-    data = pd.read_csv('FinCatch_Sources_Medium.csv')
+async def __url_Iterator(filename:str)->dict:
+    data = pd.read_csv(filename)
     tasks = []
+    jsonOutput = {}
     for _, row in data.iterrows():
         url = row['URL']
-        store[url] = Info(url, "", "")
-        tasks.append(fetch(url))
-    await asyncio.gather(*tasks)
+        tasks.append(__fetch(url))
+    results = await asyncio.gather(*tasks)
+    
+    for result in results:
+        url, text, summary = result
+        jsonOutput[url] = {'text': text, 'summary': summary}
+    
+    return jsonOutput
             
-async def main():
-    await outerFunc()
-    writeToFile_GatheredContent(store, 'output.txt')
-
-if __name__ == "__main__":
-    asyncio.run(main())
+def getURLContent(filename:str)->dict:
+    loop = asyncio.get_event_loop()
+    output = loop.run_until_complete(__url_Iterator(filename))
+    return output

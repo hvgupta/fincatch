@@ -171,4 +171,4 @@ cython_debug/
 .pypirc
 FinCatch*
 output*
-*__pycache__
+*/__pycache__
