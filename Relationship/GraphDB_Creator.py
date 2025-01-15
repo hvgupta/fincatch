@@ -27,5 +27,3 @@ def createGraphDB(inputFile:str):
                 Data_Access_Facade.createNode("Word",{"name":word})
                 Data_Access_Facade.createRelationship("Word","Website",{"name":word},{"name":getNameFromUrl(key)},text_key,{"count":text_val.count(word)})
                 sleep(0.1)
-                
-createGraphDB("output.json")
