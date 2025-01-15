@@ -172,3 +172,5 @@ cython_debug/
 FinCatch*
 output*
 */__pycache__
+test*
+Neo4j-*

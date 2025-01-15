@@ -1,5 +1,11 @@
+import sys
+import os
+sys.path.append(os.path.dirname(__file__))
+
+
 from bs4 import BeautifulSoup
 from utility import fetch
+from ai_adapter import generateSummary
 
 def __getSoupObject(parsedString: str) -> BeautifulSoup:
     return BeautifulSoup(parsedString, 'html.parser')
@@ -17,19 +23,10 @@ def __getText(page: BeautifulSoup) -> str:
     
     return text
 
-def __getSummary(page: BeautifulSoup) -> str:
-    content = __getContent(page)
-    if content == None:
-        return "this wikipedia page does not exist"
-    summary_soup = content.find_all('p')
-    summary = summary_soup[1].get_text() if len(summary_soup)>1 else ''
-    
-    return summary
-
 async def getPageContent(url: str) -> tuple[str, str]:
     reponse = await fetch(url)
     page = __getSoupObject(reponse)
     text = __getText(page)
-    summary = __getSummary(page)
+    summary = generateSummary(text)
     
     return text, summary
