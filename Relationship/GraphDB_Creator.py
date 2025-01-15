@@ -1,6 +1,10 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 import json
-from Relationship.Utils import *
-from Relationship.Database import Data_Access_Facade
+from Utils import *
+from Database import Data_Access_Facade
 
 def load_output(file:str)->dict:
     with open(file, "r") as outputFile:
@@ -10,10 +14,16 @@ def load_output(file:str)->dict:
 def getWebsiteInfo(inputFile:str):
     output = load_output(inputFile)
     for key in output:
-        yield key, removeStopWordsandStem(output[key])
+        yield key, {"text":removeStopWordsandStem(output[key]["text"]), "summary":removeStopWordsandStem(output[key]["summary"])}
 
 def createGraphDB(inputFile:str):
     for key, value in getWebsiteInfo(inputFile):
-        status = Data_Access_Facade.create_node("Website",{"name":getNameFromUrl(key), "url":key})
+        Data_Access_Facade.createNode("Website",{"name":getNameFromUrl(key), "url":key})
         for text_key, text_val in value.items():
-            pass
+            stemmedText = removeStopWordsandStem(text_val)
+            for word in stemmedText.split():
+                Data_Access_Facade.createNode("Word",{"name":word})
+                Data_Access_Facade.createRelationship("Word","Website",{"name":word},{"name":getNameFromUrl(key)},text_key,{"count":text_val.count(word)})
+                
+                
+createGraphDB("output.json")

@@ -9,4 +9,10 @@ def removeStopWordsandStem(string:str)->str:
     return ' '.join([ps.stem(w) for w in words if w not in stop_words])
 
 def getNameFromUrl(url:str)->str:
-    return unquote(url.split("/")[-1])
+    name = ""
+    if "investopedia" in url:
+        name = url.split("/")[-1]
+        name = name[:-4]
+    else:
+        name = url.split("/")[-1]
+    return unquote(name)

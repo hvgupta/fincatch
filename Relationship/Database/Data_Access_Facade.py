@@ -4,36 +4,44 @@ import os
 
 dotenv.load_dotenv()
 driver = GraphDatabase.driver(
-    os.getenv("NEO4J_URI"),
-    auth=(os.getenv("NEO4J_USER"), os.getenv("NEO4J_PASSWORD"))
+    uri=os.getenv("NEO4J_URI"),
+    auth=(os.getenv("NEO4J_USERNAME"), os.getenv("NEO4J_PASSWORD"))
 )
 
 def convertProperties_to_string(properties:dict)->str:
     return ', '.join([f"{key}: '{value}'" if isinstance(value, str) else f"{key}: {value}" for key, value in properties.items()])
 
-def checkIfNodeExist(label:str, properties:dict)->bool:
-    properties_str = convertProperties_to_string(properties)
-    return driver.run(f"MATCH (n:{label} {{{properties_str}}}) RETURN n").single() != None
+def getWhereClause(prefixName:str,properties:dict)->str:
+    return ', '.join([f"{prefixName}.{key} = '{value}'" if isinstance(value, str) else f"n.{key} = {value}" for key, value in properties.items()])
 
-def checkIfRelationshipExist(label1:str, label2:str, id1:str, id2:str, propertyName:str)->bool:
-    return driver.run(f"""
-                            MATCH (a:{label1} {{{id1}}})-[r:{propertyName}]->(b:{label2} {{{id2}}}) 
+def checkIfNodeExist(label:str, properties:dict)->bool:
+    session = driver.session()
+    return session.run(f"""
+                            MATCH (n:{label})
+                            WHERE {getWhereClause("n",properties)}
+                            return n
+                        """).single() != None
+
+def checkIfRelationshipExist(label1:str, label2:str, id1:dict, id2:dict, propertyName:str)->bool:
+    session = driver.session()
+    return session.run(f"""
+                            MATCH (a:{label1})-[r:{propertyName}]->(b:{label2}) 
+                            WHERE {getWhereClause("a",id1)} AND {getWhereClause("b",id2)}
                             RETURN r
                         """).single() != None
 
-def create_node(label:str, properties:dict):
+def createNode(label:str, properties:dict):
     properties_str = convertProperties_to_string(properties)
     if checkIfNodeExist(label, properties):
         return 0
-    
-    status = driver.run(f"CREATE (:{label} {{{properties_str}}})")
-    return status.summary().counters.nodes_created 
+    session = driver.session()
+    return session.run(f"CREATE (:{label} {{{properties_str}}})")
 
-def update_node_property(label:str, id:str, property_key:str, new_value):
-    if isinstance(new_value, str):
-        new_value = f"'{new_value}'"
-    status = driver.run(f"""
-                            MATCH (n:{label} {{id: '{id}'}}) 
+def updateNode(label:str, id:dict, property_key:str, new_value):
+    session = driver.session()
+    status = session.run(f"""
+                            MATCH (n:{label})
+                            WHERE {getWhereClause("n",id)} 
                             SET n.{property_key} = {new_value} RETURN n
                         """)
     return status.single()
@@ -44,13 +52,14 @@ def createRelationship(label1:str, label2:str, id1:dict, id2:dict, propertyName:
     label2Ids = convertProperties_to_string(id2)
     if checkIfRelationshipExist(label1, label2, label1Ids, label2Ids, propertyName):
         return 0
-    status = driver.run(f"""
-                            MATCH (a:{label1} {{{label1Ids}}}), (b:{label2} {{id: '{{{label2Ids}}}'}}) 
+    
+    session = driver.session()
+    status = session.run(f"""
+                            MATCH (a:{label1}), (b:{label2})
+                            WHERE {getWhereClause("a",id1)} AND {getWhereClause("b",id2)} 
                             CREATE (a)-[:{propertyName} {{{properties_str}}}]->(b)
                         """)
-    return status.summary().counters.relationships_created
-    
-    
+    return status
     
 def printTest(label, properties):
     print("CREATE (:{label} {{{properties}}})".format(label=label, properties=convertProperties_to_string(properties)))
