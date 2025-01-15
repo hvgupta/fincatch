@@ -21,8 +21,8 @@ Y_tensor = torch.tensor(Y, dtype=torch.float32)
 dataset = TensorDataset(X_tensor, Y_tensor)
 
 # Split the dataset into training and testing sets
-train_size = DATASET_SIZE*0.8
-test_size = DATASET_SIZE*0.2
+train_size = int(DATASET_SIZE*0.8)
+test_size = int(DATASET_SIZE*0.2)
 trainSet, testSet = random_split(dataset, [train_size, test_size])
 
 # Create DataLoaders for training and testing sets
@@ -38,6 +38,8 @@ for i in range(NUM_EPOCHS):
     model.train()
     for X_batch, Y_batch in train_loader:
         X_batch, Y_batch = X_batch.to(device), Y_batch.to(device)
+        X_batch = X_batch.view(-1, 1)
+        Y_batch = Y_batch.view(-1, 1)
         optimizer.zero_grad()
         Y_pred = model(X_batch)
         loss = loss_fn(Y_pred, Y_batch)
@@ -50,7 +52,9 @@ model.eval()
 with torch.no_grad():
     for X_batch, Y_batch in test_loader:
         X_batch, Y_batch = X_batch.to(device), Y_batch.to(device)
+        X_batch = X_batch.view(-1, 1)
+        Y_batch = Y_batch.view(-1, 1)
         Y_pred = model(X_batch)
         loss = loss_fn(Y_pred, Y_batch)
-    print(f'Test Loss: {loss.item()}')
-    print(f'Prediction: {Y_pred[0].item()}, Actual: {Y_batch[0].item()}')
+        print(f'Test Loss: {loss.item()}')
+        print(f'Prediction: {Y_pred}, Actual: {Y_batch}')
