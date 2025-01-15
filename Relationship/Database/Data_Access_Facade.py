@@ -54,5 +54,3 @@ def createRelationship(label1:str, label2:str, id1:dict, id2:dict, propertyName:
     
 def printTest(label, properties):
     print("CREATE (:{label} {{{properties}}})".format(label=label, properties=convertProperties_to_string(properties)))
-    
-printTest("topic",{"var1":1,"var2":"2","var3":3.0})
