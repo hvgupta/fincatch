@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from model import LLM_Simulator
 from Generate_Dataset import Generate_Dataset
 from torch.utils.data import DataLoader, TensorDataset, random_split
@@ -57,4 +61,3 @@ with torch.no_grad():
         Y_pred = model(X_batch)
         loss = loss_fn(Y_pred, Y_batch)
         print(f'Test Loss: {loss.item()}')
-        print(f'Prediction: {Y_pred}, Actual: {Y_batch}')

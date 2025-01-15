@@ -5,13 +5,15 @@ class LLM_Simulator(nn.Module):
         super(LLM_Simulator, self).__init__()
         self.model = nn.Sequential(
             nn.Linear(input_dim, hidden_dim),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Linear(hidden_dim, hidden_dim*2),
-            nn.ReLU(),
+            nn.BatchNorm1d(hidden_dim*2),
+            nn.LeakyReLU(),
             nn.Linear(hidden_dim*2, hidden_dim),
-            nn.ReLU(),
+            nn.BatchNorm1d(hidden_dim),
+            nn.LeakyReLU(),
             nn.Linear(hidden_dim, output_dim),
-            nn.Sigmoid()
+            nn.LeakyReLU()
         )
         self.lowerLimit = lowerLimit
         self.upperLimit = upperLimit
