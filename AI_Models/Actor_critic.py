@@ -1,14 +1,15 @@
-from AI_Models.Actor.Environment import Policy
-from AI_Models.LLM_Critic.Model import LLM_Simulator
+from Actor.Environment import Policy, Environment
+from LLM_Critic.Model import LLM_Simulator
 import torch
 import numpy as np
-from Actor.Environment import rewardFunc
 
 
 class Actor_Critic():
-    def __init__(self, Actor: Policy, Critic: LLM_Simulator, device, gamma, lmbda, epochs, eps):
-        self.actor = Actor
-        self.critic = Critic
+    def __init__(self, pretrainedActorPath:str , PreTrainedCriticPath: str ,device, gamma, lmbda, epochs, eps):
+        self.actor = Policy(1,64,1000).to(device)
+        self.critic = LLM_Simulator(1, 64, 10000).to(device)
+        self.actor.load_state_dict(torch.load(pretrainedActorPath))
+        self.critic.load_state_dict(torch.load(PreTrainedCriticPath))
         self.actor_optimizer = torch.optim.Adam(self.actor.parameters(), lr=0.001)
         self.critic_optimizer = torch.optim.Adam(self.critic.parameters(), lr=0.001)
         self.gamma = gamma
@@ -16,14 +17,11 @@ class Actor_Critic():
         self.epochs = epochs
         self.eps = eps
         self.device = device
-    
-    def get_reward_nextState(self, actorAction, LLM_action) -> tuple[int, int]:
-        return rewardFunc(actorAction, LLM_action, self.device)
+        self.envir = Environment()
     
     def end(self,count) -> bool:
         if count == 10:
             return True
-        
     
     def update(self, startingInput):
         for epoch in range(self.epochs):
@@ -38,7 +36,7 @@ class Actor_Critic():
                 state.requires_grad_(True)
                 output = self.actor(state)
                 action = torch.argmax(output, dim=1)
-                reward, input = self.get_reward_nextState(state, action)
+                reward, input = self.envir(state, action)
                 G.append(self.gamma * reward)
                 Action.append((output, action))
                 Reward.append(reward)
