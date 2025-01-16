@@ -43,7 +43,7 @@ class Generate_Dataset:
         randNum = np.random.randint(self.output_lowerLimit, self.output_upperLimit-9) # -9 to avoid 9*1111
         return randNum + randNum//1111
 
-    def getX_Y(self) -> tuple[np.ndarray, np.ndarray]:
+    def generate_dataset_io_tensors(self) -> tuple[np.ndarray, np.ndarray]:
         """
         Generate input-output pairs for the dataset.
 
