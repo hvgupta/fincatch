@@ -1,4 +1,5 @@
 from torch import nn
+import torch
 
 class LLM_Simulator(nn.Module):
     def __init__(self, state_dim, hidden_dim, output_dim, lowerLimit, upperLimit):
@@ -9,7 +10,7 @@ class LLM_Simulator(nn.Module):
             nn.Linear(hidden_dim, hidden_dim*2),
             nn.BatchNorm1d(hidden_dim*2),
             nn.LeakyReLU(),
-            nn.Linear(hidden_dim, output_dim),
+            nn.Linear(hidden_dim*2, output_dim),
             nn.Sigmoid()
         )
         self.lowerLimit = lowerLimit

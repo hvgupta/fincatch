@@ -19,10 +19,9 @@ OUTPUT_UPPER_LIMIT = 10000
 NUM_EPOCHS = 100
 
 # Generate the dataset
-X, Y = Generate_Dataset(DATASET_SIZE, INPUT_LOWER_LIMIT, INPUT_UPPER_LIMIT, OUTPUT_LOWER_LIMIT, OUTPUT_UPPER_LIMIT).getX_Y()
-X_tensor = torch.tensor(X, dtype=torch.float32)
-Y_tensor = torch.tensor(Y, dtype=torch.float32)
-dataset = TensorDataset(X_tensor, Y_tensor)
+dataset_generator = Generate_Dataset(DATASET_SIZE, INPUT_LOWER_LIMIT, INPUT_UPPER_LIMIT, OUTPUT_LOWER_LIMIT, OUTPUT_UPPER_LIMIT)
+X, Y = dataset_generator.getX_Y()
+dataset = TensorDataset(X, Y)
 
 # Split the dataset into training and testing sets
 train_size = int(DATASET_SIZE*0.8)
@@ -42,8 +41,6 @@ for i in range(NUM_EPOCHS):
     model.train()
     for X_batch, Y_batch in train_loader:
         X_batch, Y_batch = X_batch.to(device), Y_batch.to(device)
-        X_batch = X_batch.view(-1, 1)
-        Y_batch = Y_batch.view(-1, 1)
         optimizer.zero_grad()
         Y_pred = model(X_batch)
         loss = loss_fn(Y_pred, Y_batch)
@@ -61,3 +58,6 @@ with torch.no_grad():
         Y_pred = model(X_batch)
         loss = loss_fn(Y_pred, Y_batch)
         print(f'Test Loss: {loss.item()}')
+
+test = torch.tensor([[1], [2], [3]]).to(device)  
+print(model(test))

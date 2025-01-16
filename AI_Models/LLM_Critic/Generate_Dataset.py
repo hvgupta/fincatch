@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 
 class Generate_Dataset:
     def __init__(self, datasetSize, input_lowerLimit, input_upperLimit, output_lowerLimit, output_upperLimit):
@@ -22,4 +23,4 @@ class Generate_Dataset:
             else:
                 Y[i] = self.__getOtherNumber()
         
-        return X, Y
+        return torch.tensor(X,dtype=torch.float32).view(-1,1), torch.tensor(Y,dtype=torch.float32).view(-1,1)
