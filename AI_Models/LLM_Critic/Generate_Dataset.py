@@ -8,7 +8,6 @@ class Generate_Dataset:
         self.input_upperLimit = input_upperLimit
         self.output_lowerLimit = output_lowerLimit
         self.output_upperLimit = output_upperLimit
-        
 
     def __getOtherNumber(self)->int:
         randNum = np.random.randint(self.output_lowerLimit, self.output_upperLimit-9) # -9 to avoid 9*1111

@@ -4,8 +4,8 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 import pandas as pd
 import asyncio
-import Extractor.adapters.Investopedia_Adapter as investopedia
-import Extractor.adapters.Wikipedia_Adapter as enWiki
+import adapters.Investopedia_Adapter as investopedia
+import adapters.Wikipedia_Adapter as enWiki
 
 async def __fetch(url) -> list:
     text = ""

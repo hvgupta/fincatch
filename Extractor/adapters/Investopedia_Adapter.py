@@ -3,8 +3,8 @@ import os
 sys.path.append(os.path.dirname(__file__))
 
 from bs4 import BeautifulSoup
-from Extractor.Utils import fetch
-from Extractor.adapters.AI_Adapter import generateSummary
+from Utils import fetch
+from AI_Adapter import generateSummary
 
 def __getSoupObject(parsedString) -> BeautifulSoup:
     return BeautifulSoup(parsedString, 'html.parser')
