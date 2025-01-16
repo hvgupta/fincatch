@@ -23,9 +23,8 @@ class Policy(nn.Module):
         
         for digit in range(4):
             actor_map[actor_action//10**digit%10] += 1
-        
-        for digit in range(3):
             critic_map[critic_action//10**digit%10] += 1
+
         same_digit = 0
         for digit in range(10):
             same_digit += min(actor_map[digit], critic_map[digit])
@@ -33,3 +32,5 @@ class Policy(nn.Module):
         if same_digit == 3: return 100
         if same_digit == 2: return 20
         if same_digit == 1: return 10
+        
+        return 0

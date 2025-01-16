@@ -16,7 +16,7 @@ INPUT_UPPER_LIMIT = 100
 OUTPUT_LOWER_LIMIT = 1
 OUTPUT_UPPER_LIMIT = 10000
 
-NUM_EPOCHS = 100
+NUM_EPOCHS = 1000
 
 # Generate the dataset
 dataset_generator = Generate_Dataset(DATASET_SIZE, INPUT_LOWER_LIMIT, INPUT_UPPER_LIMIT, OUTPUT_LOWER_LIMIT, OUTPUT_UPPER_LIMIT)
@@ -32,7 +32,7 @@ trainSet, testSet = random_split(dataset, [train_size, test_size])
 train_loader = DataLoader(trainSet, batch_size=32, shuffle=True)
 test_loader = DataLoader(testSet, batch_size=32, shuffle=False)
 
-model = LLM_Simulator(1, 64, 1, 1, 10000).to(device)
+model = LLM_Simulator(1, 64, 1).to(device)
 loss_fn = MSELoss().to(device=device)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
@@ -59,5 +59,5 @@ with torch.no_grad():
         loss = loss_fn(Y_pred, Y_batch)
         print(f'Test Loss: {loss.item()}')
 
-test = torch.tensor([[1], [2], [3]]).to(device)  
+test = torch.tensor([[1], [2], [3]],dtype=torch.float32).to(device)  
 print(model(test))
