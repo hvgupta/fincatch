@@ -5,7 +5,28 @@ import numpy as np
 
 
 class PPO():
+    """
+    Proximal Policy Optimization (PPO) class for training reinforcement learning agents.
+
+    This class implements the PPO algorithm, which is a popular policy 
+    optimization method in reinforcement learning. It utilizes an actor-critic 
+    architecture to optimize the policy while estimating value functions.
+    """
     def __init__(self, Actor: Policy, Critic: LLM_Simulator, device, gamma, lmbda, epochs, eps):
+         """
+        Initialize the PPO class.
+
+        Sets up the actor and critic networks, optimizers, and hyperparameters.
+
+        Parameters:
+        Actor (Policy): The actor network instance.
+        Critic (LLM_Simulator): The critic network instance.
+        device (torch.device): Device to run the model (CPU or GPU).
+        gamma (float): Discount factor for future rewards.
+        lmbda (float): Factor for Generalized Advantage Estimation (GAE).
+        epochs (int): Number of epochs to train per update.
+        eps (float): Clipping parameter for PPO.
+        """
         self.actor = Actor
         self.critic = Critic
         self.actor_optimizer = torch.optim.Adam(self.actor.parameters(), lr=0.001)
@@ -17,6 +38,20 @@ class PPO():
         self.device = device
         
     def compute_advantage(self, td_delta):
+         """
+        Compute advantage using Generalized Advantage Estimation (GAE).
+
+        This method calculates the advantages based on the temporal difference 
+        deltas provided. GAE helps in reducing variance in policy gradient 
+        estimates while maintaining bias control.
+
+        Parameters:
+        td_delta (torch.Tensor): Temporal difference deltas computed during training.
+
+        Returns:
+        torch.Tensor: A tensor containing the computed advantages, moved to the 
+                      specified device.
+        """
         ''' Compute advantage using GAE (Generalized Advantage Estimation) '''
         td_delta = td_delta.detach().cpu().numpy()
         advantage_list = []
