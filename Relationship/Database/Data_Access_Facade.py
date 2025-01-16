@@ -74,12 +74,6 @@ def checkIfNodeExist(label:str, properties:dict)->bool:
                             return n
                         """).single() != None
 
-def checkIfRelationshipExist(label1:str, label2:str, id1:dict, id2:dict, propertyName:str)->bool:
-    python
-
-Run
-
-Copy
 def checkIfRelationshipExist(label1: str, label2: str, id1: dict, id2: dict, propertyName: str) -> bool:
     """
     Check if a relationship exists between two nodes in the graph database.
