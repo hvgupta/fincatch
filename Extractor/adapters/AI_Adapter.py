@@ -3,7 +3,7 @@ from openai import AzureOpenAI
 import dotenv
 
 dotenv.load_dotenv()
-
+# Initialize the Azure OpenAI client with the specified parameters.
 client = AzureOpenAI(
     azure_endpoint="https://hkust.azure-api.net",
     api_key=os.getenv("HKUST_AZURE_AI_API_KEY_PRIMARY"),
