@@ -6,6 +6,7 @@ import pandas as pd
 import asyncio
 import adapters.Investopedia_Adapter as investopedia
 import adapters.Wikipedia_Adapter as enWiki
+import json
 
 async def __fetch(url) -> list:
     text = ""
@@ -33,7 +34,8 @@ async def __url_Iterator(filename:str)->dict:
     
     return jsonOutput
             
-def getURLContent(filename:str)->dict:
+def getURLContent(csv_file_path:str, output_file_path:str)->dict:
     loop = asyncio.get_event_loop()
-    output = loop.run_until_complete(__url_Iterator(filename))
-    return output
+    output = loop.run_until_complete(__url_Iterator(csv_file_path))
+    with open(output_file_path, 'w') as f:
+        json.dump(output, f)
