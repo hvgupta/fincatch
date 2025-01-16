@@ -1,5 +1,5 @@
 from Actor.Policy import Policy
-from LLM_Critic.model import LLM_Simulator
+from AI_Models.LLM_Critic.Model import LLM_Simulator
 import torch
 import numpy as np
 

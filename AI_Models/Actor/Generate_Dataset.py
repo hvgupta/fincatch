@@ -1,13 +1,13 @@
-import sys
-import os
-parent_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
-sys.path.append(parent_dir)
+from LLM_Critic.Model import LLM_Simulator
 import torch
 
 
 class Generate_Dataset:
-    def __init__(self, CriticPath:str, datasetSize:int, critic_lowerLimit:int, critic_upperLimit:int):
-        self.Critic = torch.load(CriticPath)
+    def __init__(self, CriticPath:str, datasetSize:int, critic_lowerLimit:int, critic_upperLimit:int, device):
+        state_dict = torch.load(CriticPath)
+        self.Critic = LLM_Simulator(1, 64, 10000).to(device)
+        self.Critic.load_state_dict(state_dict)
+        self.Critic.eval()
         self.datasetSize = datasetSize
         self.critic_lowerLimit = critic_lowerLimit
         self.critic_upperLimit = critic_upperLimit

@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from model import LLM_Simulator
+from AI_Models.LLM_Critic.Model import LLM_Simulator
 from Generate_Dataset import Generate_Dataset
 from torch.utils.data import DataLoader, TensorDataset
 from torch.nn import CrossEntropyLoss
