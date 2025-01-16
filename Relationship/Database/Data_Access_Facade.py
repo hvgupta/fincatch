@@ -2,11 +2,17 @@ import dotenv
 from neo4j import GraphDatabase
 import os
 
+# Load environment variables from a .env file into the system's environment variables.
 dotenv.load_dotenv()
+
+# Initialize a Neo4j database driver to connect to the database.
+# The connection parameters are retrieved from environment variables for security,
+# ensuring sensitive information like URI, username, and password are not hardcoded.
 driver = GraphDatabase.driver(
     uri=os.getenv("NEO4J_URI"),
     auth=(os.getenv("NEO4J_USERNAME"), os.getenv("NEO4J_PASSWORD"))
 )
+# Create a new session with the Neo4j database driver.
 session = driver.session()
 
 def convertProperties_to_string(properties:dict)->str:
