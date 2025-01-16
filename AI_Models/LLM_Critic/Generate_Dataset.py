@@ -2,7 +2,7 @@ import numpy as np
 import torch
 
 class Generate_Dataset:
-     """
+    """
     A class to generate synthetic datasets for training models.
 
     This class generates a dataset of input-output pairs based on specified 
@@ -11,7 +11,7 @@ class Generate_Dataset:
     by 1111 or generating alternative numbers.
     """
     def __init__(self, datasetSize, input_lowerLimit, input_upperLimit, output_lowerLimit, output_upperLimit):
-         """
+        """
         Initialize the Generate_Dataset class.
 
         Sets up the parameters for dataset generation.
@@ -30,7 +30,7 @@ class Generate_Dataset:
         self.output_upperLimit = output_upperLimit
 
     def __getOtherNumber(self)->int:
-          """
+        """
         Generate an alternative output number.
 
         This method generates a random integer within the output limits, 

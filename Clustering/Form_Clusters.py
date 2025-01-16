@@ -11,7 +11,7 @@ driver = GraphDatabase.driver(
 session = driver.session()
 
 def generateClusters(outputFile:str)->None:
-      """
+    """
     Generate clusters of words based on their associated websites and save the result to a JSON file.
 
     This function queries a Neo4j database to identify words that are 

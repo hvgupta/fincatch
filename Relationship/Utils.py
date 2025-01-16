@@ -3,7 +3,7 @@ from nltk.stem import PorterStemmer
 from urllib.parse import unquote
 
 def removeUneededChars(string: str) -> str:
-     """
+    """
     Remove invalid characters from a string.
 
     This function filters a string, retaining only alphanumeric characters, 
@@ -18,7 +18,7 @@ def removeUneededChars(string: str) -> str:
     return ''.join(c for c in string if c.isalnum() or c.isspace() or c == '-')
 
 def removeStopWordsandStem(string: str) -> str:
-     """
+    """
     Remove stop words from a string and apply stemming to the remaining words.
 
     This function takes a string, splits it into words, removes common English 
@@ -37,7 +37,7 @@ def removeStopWordsandStem(string: str) -> str:
     return ' '.join(ps.stem(removeUneededChars(w)) for w in words if w not in stop_words)
 
 def getNameFromUrl(url: str) -> str:
-      """
+    """
     Extract the name component from a URL.
 
     This function takes a URL string, splits it to retrieve the last segment, 

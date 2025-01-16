@@ -17,7 +17,7 @@ driver = GraphDatabase.driver(
 session = driver.session()
 
 def convertProperties_to_string(properties:dict)->str:
-      """
+    """
     Convert a dictionary of properties into a formatted string suitable for Cypher queries.
 
     This function takes a dictionary where keys are property names and values 
@@ -35,7 +35,7 @@ def convertProperties_to_string(properties:dict)->str:
     return ', '.join([f"{key}: '{value}'" if isinstance(value, str) else f"{key}: {value}" for key, value in properties.items()])
 
 def getWhereClause(prefixName:str,properties:dict)->str:
-     """
+    """
     Generate a WHERE clause for a Cypher query based on given properties.
 
     This function constructs a WHERE clause that can be used in a Cypher 
@@ -55,7 +55,7 @@ def getWhereClause(prefixName:str,properties:dict)->str:
     return ' AND '.join([f"{prefixName}.{key} = '{value}'" if isinstance(value, str) else f"n.{key} = {value}" for key, value in properties.items()])
 
 def checkIfNodeExist(label:str, properties:dict)->bool:
-     """
+    """
     Check if a node exists in the graph database based on its label and properties.
 
     This function executes a Cypher query to determine whether a node with 
@@ -76,7 +76,7 @@ def checkIfNodeExist(label:str, properties:dict)->bool:
                         """).single() != None
 
 def checkIfRelationshipExist(label1:str, label2:str, id1:dict, id2:dict, propertyName:str)->bool:
-     """
+    """
     Check if a relationship exists between two nodes in the graph database.
 
     This function executes a Cypher query to determine whether a relationship 
@@ -101,7 +101,7 @@ def checkIfRelationshipExist(label1:str, label2:str, id1:dict, id2:dict, propert
                         """).single() != None
 
 def updateNode(label:str, id:dict, property_key:str, new_value):
-     """
+    """
     Update a property of a node in the graph database.
 
     This function executes a Cypher query to update a specified property of 
@@ -126,7 +126,7 @@ def updateNode(label:str, id:dict, property_key:str, new_value):
     return status.single()
 
 def createNode(label:str, properties:dict):
-      """
+    """
     Create a new node in the graph database with specified properties.
 
     This function checks if a node with the specified label and properties 
@@ -148,7 +148,7 @@ def createNode(label:str, properties:dict):
     return session.run(f"CREATE (:{label} {{{properties_str}}})")
 
 def createRelationship(label1:str, label2:str, id1:dict, id2:dict, propertyName:str ,properties:dict):
-      """
+    """
     Create a relationship between two nodes in a graph database.
 
     This function checks if a relationship already exists between two nodes 

@@ -2,12 +2,12 @@ from torch import nn
 import torch
 
 class LLM_Simulator(nn.Module):
-     """
+    """
     A neural network model simulating a large language model (LLM).
   
     """
     def __init__(self, state_dim, hidden_dim, output_dim):
-         """
+        """
         Initialize the LLM_Simulator class.
 
         Sets up the neural network architecture with specified dimensions.
@@ -27,7 +27,7 @@ class LLM_Simulator(nn.Module):
         )
 
     def forward(self, x):
-         """
+        """
         Forward pass through the network to compute the output.
 
         Parameters:

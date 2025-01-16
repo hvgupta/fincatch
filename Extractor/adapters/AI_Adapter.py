@@ -11,7 +11,7 @@ client = AzureOpenAI(
 )
 
 def generateSummary(parsedString:str)->str:
-      """
+    """
     Generate a summary for a financial article using a chat-based AI model.
 
     This function utilizes a chat-based AI model to generate a concise summary of the provided financial article.

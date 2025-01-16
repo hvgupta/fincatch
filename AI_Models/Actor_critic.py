@@ -1,12 +1,11 @@
 from Actor.Environment import Policy, Environment
 from LLM_Critic.Model import LLM_Simulator
 import torch
-import numpy as np
 
 
 class Actor_Critic():
-    """A class that implements the Actor-Critic reinforcement learning algorithm.
-
+    """
+    A class that implements the Actor-Critic reinforcement learning algorithm.
     This class initializes and manages the actor and critic networks, 
     loads their pre-trained weights, and contains methods for updating 
     the networks based on interactions with an environment.
@@ -38,7 +37,7 @@ class Actor_Critic():
         self.envir = Environment()
     
     def end(self,count) -> bool:
-         """Check if the training episode should end.
+        """Check if the training episode should end.
         Args:
             count: The current count of actions taken.
         Returns:
@@ -48,7 +47,7 @@ class Actor_Critic():
             return True
     
     def update(self, startingInput):
-         """
+        """
          Update the actor-critic model for a specified number of epochs.
 
         Args:

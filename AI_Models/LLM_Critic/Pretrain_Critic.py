@@ -2,11 +2,13 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from AI_Models.LLM_Critic.Model import LLM_Simulator
-from Generate_Dataset import Generate_Dataset
 from torch.utils.data import DataLoader, TensorDataset
 from torch.nn import CrossEntropyLoss
 import torch
+
+from Model import LLM_Simulator
+from Generate_Dataset import Generate_Dataset
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device)
 

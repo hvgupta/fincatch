@@ -8,7 +8,7 @@ from Database import Data_Access_Facade
 from time import sleep
 
 def __load_output(file:str)->dict:
-      """
+    """
     Load JSON data from a specified file.
 
     This function reads a JSON file and parses its contents into a Python 
@@ -25,7 +25,7 @@ def __load_output(file:str)->dict:
     return output
 
 def __getWebsiteInfo(inputFile:str):
-      """
+    """
     Generate website information from a JSON input file.
 
     This function reads a JSON file containing website data, processes the 
@@ -44,7 +44,7 @@ def __getWebsiteInfo(inputFile:str):
         yield key, {"text":removeStopWordsandStem(output[key]["text"]), "summary":removeStopWordsandStem(output[key]["summary"])}
 
 def createGraphDB(inputFile:str):
-     """
+    """
     Create a graph database from website information provided in a JSON input file.
 
     This function processes each entry in the input JSON file, creates nodes 

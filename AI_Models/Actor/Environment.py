@@ -2,7 +2,7 @@ from torch import nn
 import torch
 
 class Policy(nn.Module):
-      """
+    """
     A neural network-based policy for reinforcement learning.
 
     This class defines a policy network that maps state observations to actions. 
@@ -10,7 +10,7 @@ class Policy(nn.Module):
     and outputs are scaled to a specified range defined by lower and upper limits.
     """
     def __init__(self, state_dim, hidden_dim ,output_dim):
-          """
+        """
     Initialize the Policy class.
 
     This method sets up the neural network architecture for the policy, 
@@ -27,7 +27,7 @@ class Policy(nn.Module):
                         scaling the output of the neural network.
     upperLimit (float): The maximum value for the action outputs, used for 
                         scaling the output of the neural network.
-    """
+        """
         super(Policy, self).__init__()
         self.model = nn.Sequential(
             nn.Linear(state_dim, hidden_dim),
@@ -38,7 +38,7 @@ class Policy(nn.Module):
         )
 
     def forward(self, x):
-         """
+        """
     Compute the action based on the input state.
 
     This method performs a forward pass through the policy network, 
@@ -53,7 +53,7 @@ class Policy(nn.Module):
     torch.Tensor: Scaled action output based on the input state, with values 
                   adjusted to be within the range defined by lowerLimit and 
                   upperLimit.
-    """
+        """
         return self.model(x)
     
     
@@ -77,7 +77,7 @@ def simToReward(sim_output):
 
 
 def rewardFunc(actor_actions, critic_actions, device):
-     """
+    """
     Compute the reward based on the similarity of actions taken by the actor 
     and the critic.
 

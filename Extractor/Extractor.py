@@ -9,7 +9,7 @@ import adapters.Wikipedia_Adapter as enWiki
 import json
 
 async def __fetch(url) -> list:
-      """
+    """
     Asynchronously fetch content and summary from a specified URL.
 
     This function retrieves the content and summary of a webpage based on 
@@ -39,7 +39,7 @@ async def __fetch(url) -> list:
     return [url, text, summary]
     
 async def __url_Iterator(filename:str)->dict:
-      """
+    """
     Asynchronously iterate over URLs in a CSV file and fetch their content and summaries.
 
     This function reads a CSV file containing URLs, retrieves the content and 
@@ -72,7 +72,7 @@ async def __url_Iterator(filename:str)->dict:
     return jsonOutput
             
 def getURLContent(csv_file_path:str, output_file_path:str)->dict:
-      """
+    """
     Synchronously fetch content and summaries for URLs listed in a CSV file.
 
     This function serves as a wrapper to create an event loop and execute

@@ -2,7 +2,7 @@ import aiohttp
 
 
 async def fetch(url) -> str:
-     """
+    """
     Asynchronously fetch the raw content of a webpage.
 
     This function retrieves the content of a webpage from the specified URL 
@@ -29,7 +29,7 @@ async def fetch(url) -> str:
 
 
 def writeToFile_GatheredContent(store, filename):
-     """
+    """
     Write gathered content and summaries to a specified text file.
 
     This function takes a dictionary containing URLs as keys and their 

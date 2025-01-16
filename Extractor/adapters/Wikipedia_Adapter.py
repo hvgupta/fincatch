@@ -7,7 +7,7 @@ from Utils import fetch
 from AI_Adapter import generateSummary
 
 def __getSoupObject(parsedString: str) -> BeautifulSoup:
-      """
+    """
     Create a BeautifulSoup object from a parsed HTML string.
 
     This function takes a string containing parsed HTML content and converts it 
@@ -24,7 +24,7 @@ def __getSoupObject(parsedString: str) -> BeautifulSoup:
     return BeautifulSoup(parsedString, 'html.parser')
 
 def __getContent(page: BeautifulSoup) -> BeautifulSoup:
-     """
+    """
     Extracts the content <div> from a BeautifulSoup page object.
 
     This function searches for a <div> element with a specific id and class 
@@ -42,7 +42,7 @@ def __getContent(page: BeautifulSoup) -> BeautifulSoup:
     return content_div if content_div else None
 
 def __getText(page: BeautifulSoup) -> str:
-     """
+    """
     Extract the main text content from a BeautifulSoup object.
 
     This function takes a BeautifulSoup object representing a parsed HTML 
@@ -68,7 +68,7 @@ def __getText(page: BeautifulSoup) -> str:
     return text
 
 async def getPageContent(url: str) -> tuple[str, str]:
-      """
+    """
     Asynchronously fetch and extract content and summary from a webpage.
 
     This function retrieves the HTML content from the specified URL, processes 
