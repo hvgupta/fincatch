@@ -20,7 +20,7 @@ NUM_EPOCHS = 1000
 
 # Generate the dataset
 dataset_generator = Generate_Dataset(DATASET_SIZE, INPUT_LOWER_LIMIT, INPUT_UPPER_LIMIT, OUTPUT_LOWER_LIMIT, OUTPUT_UPPER_LIMIT)
-X, Y = dataset_generator.getX_Y()
+X, Y = dataset_generator.generate_dataset_io_tensors()
 dataset = TensorDataset(X, Y)
 
 # Create DataLoaders for training and testing sets
