@@ -15,60 +15,34 @@ class Policy(nn.Module):
     def forward(self, x):
         return self.model(x)
     
-import torch
-
-def expand_to_digit_counts(tensor, device):
-    # Get the shape of the input tensor and add a new dimension for the 10 digits
-    shape = list(tensor.shape) + [10]
-    # Create an output tensor filled with zeros
-    digit_counts = torch.zeros(*shape, dtype=torch.int64, device=device)
     
-    # Flatten the input tensor for easier processing
-    flat_tensor = tensor.view(-1)
-    # Flatten the output tensor for easier indexing
-    flat_digit_counts = digit_counts.view(-1, 10)
+def simToReward(sim_output):
+    # Create a new tensor to store the modified values
+    modified_output = sim_output[0].clone()
     
-    for i, value in enumerate(flat_tensor):
-        value = abs(value.item())  # Ensure the value is non-negative
-        digit_count = 0
-        
-        # Count digits and populate the digit tensor
-        while value > 0:
-            digit = value % 10
-            flat_digit_counts[i, digit] += 1
-            value //= 10
-            digit_count += 1
-        
-        # Add padding for numbers with fewer than 4 digits
-        if digit_count < 4:
-            flat_digit_counts[i, 0] += (4 - digit_count)
-    
-    # Reshape back to the original shape with the new dimension
-    return digit_counts
-
-def simDigitToReward(digit_counts):
-    for i in range(len(digit_counts)):
-        if digit_counts[i]== 1 or digit_counts[i]== 2:
-            digit_counts[i]*= 10
-        elif digit_counts[i]== 3:
-            digit_counts[i]*= 100/3
+    for i in range(len(sim_output)):
+        if modified_output[i].item() == 1 or modified_output[i].item() == 2:
+            modified_output[i] *= 10
+        elif modified_output[i].item() == 3:
+            modified_output[i] = modified_output[i].float() * (100 / 3)
         else:
-            digit_counts[i]*= 0
-    return digit_counts
-        
-
-def lossFunc(actor_actions, critic_actions, device):
-    
-    actor_digit_counts = expand_to_digit_counts(actor_actions,device)
-    critic_digit_counts = expand_to_digit_counts(critic_actions,device)
-    
-    min_digit_counts = torch.minimum(actor_digit_counts, critic_digit_counts)
-    
-    return simDigitToReward(min_digit_counts.sum(dim=1))
+            modified_output[i] *= 0
+            
+    return modified_output
 
 
-print(lossFunc(torch.tensor([937, 123, 456, 789]), torch.tensor([89, 1, 444, 789]), 'cpu'))
+def rewardFunc(actor_actions, critic_actions, device):
+    # Expand actor and critic actions to digit counts
+    same = ((actor_actions//1000)%10 == (critic_actions//1000)%10)*1 + \
+            ((actor_actions//100)%10 == (critic_actions//100)%10)*1 + \
+            ((actor_actions//10)%10 == (critic_actions//10)%10)*1 + \
+            (actor_actions%10 == critic_actions%10)*1
+    return simToReward(same), same
 
+class Environment(nn.Module):
+    def __init__(self):
+        super(Environment, self).__init__()
 
-
-
+    def forward(self, actor_actions, critic_actions, device):
+        rewards,match = rewardFunc(actor_actions, critic_actions, device)
+        return rewards.to(torch.float32).mean(), match
