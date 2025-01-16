@@ -34,7 +34,7 @@ def removeStopWordsandStem(string: str) -> str:
     ps = PorterStemmer()
     stop_words = set(stopwords.words('english'))
     words = string.split()
-    return ' '.join(ps.stem(removeUneededChars(w)) for w in words if w not in stop_words)
+    return ' '.join(ps.stem(removeInvalidChars(w)) for w in words if w not in stop_words)
 
 def getNameFromUrl(url: str) -> str:
      """
