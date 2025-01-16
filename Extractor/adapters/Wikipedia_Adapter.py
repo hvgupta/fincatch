@@ -7,9 +7,37 @@ from Utils import fetch
 from AI_Adapter import generateSummary
 
 def __getSoupObject(parsedString: str) -> BeautifulSoup:
+     """
+    Create a BeautifulSoup object from a parsed HTML string.
+
+    This function takes a string containing parsed HTML content and converts it 
+    into a BeautifulSoup object, which allows for easy manipulation and 
+    navigation of the HTML structure.
+
+    Parameters:
+    parsedString (str): A string representation of parsed HTML content.
+
+    Returns:
+    BeautifulSoup: A BeautifulSoup object that represents the HTML structure 
+                   for further processing.
+    """
     return BeautifulSoup(parsedString, 'html.parser')
 
 def __getContent(page: BeautifulSoup) -> BeautifulSoup:
+     """
+    Extracts the content <div> from a BeautifulSoup page object.
+
+    This function searches for a <div> element with a specific id and class 
+    within the provided BeautifulSoup page object. It returns the found 
+    <div> element if it exists; otherwise, it returns None.
+
+    Parameters:
+    page (BeautifulSoup): A BeautifulSoup object representing the parsed HTML page.
+
+    Returns:
+    BeautifulSoup or None: The <div> element containing the content if found, 
+                           or None if the element does not exist.
+    """
     content_div = page.find('div', id='mw-content-text', class_='mw-body-content')
     return content_div if content_div else None
 
