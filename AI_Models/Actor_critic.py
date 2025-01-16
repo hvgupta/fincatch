@@ -5,7 +5,25 @@ import numpy as np
 
 
 class Actor_Critic():
+    """A class that implements the Actor-Critic reinforcement learning algorithm.
+
+    This class initializes and manages the actor and critic networks, 
+    loads their pre-trained weights, and contains methods for updating 
+    the networks based on interactions with an environment.
+    """
     def __init__(self, pretrainedActorPath:str , PreTrainedCriticPath: str ,device, gamma, lmbda, epochs, eps):
+        """
+        Initialize the Actor-Critic model with given parameters.
+
+        Args:
+            pretrainedActorPath (str): Path to the pre-trained actor model.
+            PreTrainedCriticPath (str): Path to the pre-trained critic model.
+            device: The device to run the model on (CPU or GPU).
+            gamma: Discount factor for future rewards.
+            lmbda: Lambda parameter for Generalized Advantage Estimation.
+            epochs: Number of training epochs.
+            eps: Epsilon for exploration.
+        """
         self.actor = Policy(1,64,1000).to(device)
         self.critic = LLM_Simulator(1, 64, 10000).to(device)
         self.actor.load_state_dict(torch.load(pretrainedActorPath))
@@ -20,10 +38,22 @@ class Actor_Critic():
         self.envir = Environment()
     
     def end(self,count) -> bool:
+         """Check if the training episode should end.
+        Args:
+            count: The current count of actions taken.
+        Returns:
+            bool: True if the episode should end, otherwise False.
+        """
         if count == 10:
             return True
     
     def update(self, startingInput):
+         """
+         Update the actor-critic model for a specified number of epochs.
+
+        Args:
+            startingInput: The initial input state for the environment.
+        """
         for epoch in range(self.epochs):
             G = []
             Action = []
