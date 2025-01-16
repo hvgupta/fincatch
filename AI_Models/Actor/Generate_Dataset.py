@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from AI_Models.LLM_Critic.Model import LLM_Simulator
+from LLM_Critic.Model import LLM_Simulator
 import torch
 
 class Generate_Dataset:
@@ -14,7 +14,8 @@ class Generate_Dataset:
         self.datasetSize = datasetSize
         self.critic_lowerLimit = critic_lowerLimit
         self.critic_upperLimit = critic_upperLimit
+        self.device = device
     
     def getX(self) -> torch.Tensor:
-        criticInput = torch.randint(self.critic_lowerLimit, self.critic_upperLimit + 1, (self.datasetSize, 1), dtype=torch.float32)
-        return self.Critic(criticInput)
+        criticInput = torch.randint(self.critic_lowerLimit, self.critic_upperLimit + 1, (self.datasetSize, 1), dtype=torch.float32).to(self.device)
+        return torch.argmax(self.Critic(criticInput),dim=1).view(-1,1)

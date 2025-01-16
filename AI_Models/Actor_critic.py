@@ -1,4 +1,4 @@
-from Actor.Policy import Policy
+from AI_Models.Actor.Environment import Policy
 from AI_Models.LLM_Critic.Model import LLM_Simulator
 import torch
 import numpy as np
